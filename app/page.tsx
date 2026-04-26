@@ -95,7 +95,7 @@ export default function Page() {
       <header className="mb-10">
         <h1 className="text-3xl font-semibold tracking-tight">AI Lightroom Preset Generator</h1>
         <p className="text-neutral-400 mt-2 text-sm leading-relaxed">
-          Upload a JPEG. Llama 4 Scout (vision) analyzes the image and generates a Lightroom Classic <code className="text-neutral-300">.xmp</code> preset
+          Upload a JPEG. Llama 4 Maverick (vision) analyzes the image and generates a Lightroom Classic <code className="text-neutral-300">.xmp</code> preset
           tuned to its lighting and mood. Subtle, professional edits — never the same recipe twice.
         </p>
         <p className="text-neutral-500 mt-2 text-xs">
@@ -180,7 +180,7 @@ export default function Page() {
       )}
 
       <footer className="mt-16 text-xs text-neutral-600 text-center">
-        Built with Llama 4 Scout vision on Groq · Schema-validated output
+        Built with Llama 4 Maverick vision on Groq · Schema-validated output
       </footer>
     </main>
   );

@@ -71,7 +71,7 @@ Remember: vary your edit to fit THIS image. Stay subtle on contrast and clarity.
 
   try {
     const completion = await groq.chat.completions.create({
-      model: "meta-llama/llama-4-scout-17b-16e-instruct",
+      model: "meta-llama/llama-4-maverick-17b-128e-instruct",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         {

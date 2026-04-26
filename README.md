@@ -1,12 +1,12 @@
 # AI Lightroom Preset Generator
 
-Upload a photo. Llama 4 Scout (vision) on Groq analyzes it and generates a Lightroom Classic `.xmp` preset tailored to that specific image — no generic recipes, no over-contrast.
+Upload a photo. Llama 4 Maverick (vision) on Groq analyzes it and generates a Lightroom Classic `.xmp` preset tailored to that specific image — no generic recipes, no over-contrast.
 
 ## What it does
 
 - Accepts a JPEG / PNG / WEBP upload
 - Resizes client-side (max 1568px) so Vercel's body limit isn't a problem
-- Sends the image to Llama 4 Scout (vision) with a strict system prompt: read scene + lighting + mood, produce subtle professional adjustments, vary the edit per image
+- Sends the image to Llama 4 Maverick (vision) with a strict system prompt: read scene + lighting + mood, produce subtle professional adjustments, vary the edit per image
 - Validates the response against a Zod schema (Basic, HSL, Color Grading, Detail panels)
 - Generates a Lightroom Classic `.xmp` Develop preset that drops straight into `~/Library/Application Support/Adobe/CameraRaw/Settings/User Presets/` (macOS) or `%APPDATA%\Adobe\CameraRaw\Settings\User Presets\` (Windows)
 
@@ -14,7 +14,7 @@ Upload a photo. Llama 4 Scout (vision) on Groq analyzes it and generates a Light
 
 - Next.js 15 (App Router) · React 19 · TypeScript
 - Tailwind CSS
-- `groq-sdk` with `meta-llama/llama-4-scout-17b-16e-instruct` + JSON response mode
+- `groq-sdk` with `meta-llama/llama-4-maverick-17b-128e-instruct` + JSON response mode
 - Zod for response validation
 
 ## Get a Groq API key (free tier)
@@ -24,7 +24,7 @@ Upload a photo. Llama 4 Scout (vision) on Groq analyzes it and generates a Light
 3. Click **Create API Key** → name it anything
 4. Copy the key (starts with `gsk_...`)
 
-The free tier on Groq covers normal personal use without a credit card. Llama 4 Scout has generous daily request limits.
+The free tier on Groq covers normal personal use without a credit card. Llama 4 Maverick has generous daily request limits.
 
 ## Local development
 
