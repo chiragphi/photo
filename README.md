@@ -1,12 +1,12 @@
 # AI Lightroom Preset Generator
 
-Upload a photo. Google Gemini 2.0 Flash (vision) analyzes it and generates a Lightroom Classic `.xmp` preset tailored to that specific image — no generic recipes, no over-contrast.
+Upload a photo. Llama 4 Scout (vision) on Groq analyzes it and generates a Lightroom Classic `.xmp` preset tailored to that specific image — no generic recipes, no over-contrast.
 
 ## What it does
 
 - Accepts a JPEG / PNG / WEBP upload
 - Resizes client-side (max 1568px) so Vercel's body limit isn't a problem
-- Sends the image to Gemini with a strict system prompt: read scene + lighting + mood, produce subtle professional adjustments, vary the edit per image
+- Sends the image to Llama 4 Scout (vision) with a strict system prompt: read scene + lighting + mood, produce subtle professional adjustments, vary the edit per image
 - Validates the response against a Zod schema (Basic, HSL, Color Grading, Detail panels)
 - Generates a Lightroom Classic `.xmp` Develop preset that drops straight into `~/Library/Application Support/Adobe/CameraRaw/Settings/User Presets/` (macOS) or `%APPDATA%\Adobe\CameraRaw\Settings\User Presets\` (Windows)
 
@@ -14,23 +14,23 @@ Upload a photo. Google Gemini 2.0 Flash (vision) analyzes it and generates a Lig
 
 - Next.js 15 (App Router) · React 19 · TypeScript
 - Tailwind CSS
-- `@google/genai` with `gemini-2.0-flash` + JSON response mode
+- `groq-sdk` with `meta-llama/llama-4-scout-17b-16e-instruct` + JSON response mode
 - Zod for response validation
 
-## Get a Gemini API key (free tier)
+## Get a Groq API key (free tier)
 
-1. Visit https://aistudio.google.com/apikey
-2. Sign in with a Google account
-3. Click **Create API key** → pick or create a Google Cloud project
-4. Copy the key (starts with `AIza...`)
+1. Visit https://console.groq.com/keys
+2. Sign in (Google / GitHub / email)
+3. Click **Create API Key** → name it anything
+4. Copy the key (starts with `gsk_...`)
 
-The free tier on `gemini-2.0-flash` covers normal personal use without a credit card.
+The free tier on Groq covers normal personal use without a credit card. Llama 4 Scout has generous daily request limits.
 
 ## Local development
 
 ```bash
 npm install
-cp .env.example .env.local        # paste your GEMINI_API_KEY
+cp .env.example .env.local        # paste your GROQ_API_KEY
 npm run dev
 ```
 
@@ -40,7 +40,7 @@ Then open http://localhost:3000.
 
 1. Push this repo to GitHub.
 2. In Vercel: **New Project → Import** the repo.
-3. Add env var: `GEMINI_API_KEY=AIza...`
+3. Add env var: `GROQ_API_KEY=gsk_...`
 4. Deploy.
 
 The API route runs on the Node.js runtime with `maxDuration = 60s`.

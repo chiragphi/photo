@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
+import Groq from "groq-sdk";
 import { PresetSchema } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -38,8 +38,8 @@ CRITICAL RULES — READ CAREFULLY:
 Output ONLY valid JSON conforming exactly to the schema. Do not include markdown fences, prose, or commentary outside the JSON.`;
 
 export async function POST(req: Request) {
-  if (!process.env.GEMINI_API_KEY) {
-    return NextResponse.json({ error: "GEMINI_API_KEY not set" }, { status: 500 });
+  if (!process.env.GROQ_API_KEY) {
+    return NextResponse.json({ error: "GROQ_API_KEY not set" }, { status: 500 });
   }
 
   let body: { imageBase64?: string; mediaType?: string };
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unsupported media type" }, { status: 400 });
   }
 
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
   const schemaJson = describeSchema();
 
@@ -70,25 +70,27 @@ ${JSON.stringify(schemaJson, null, 2)}
 Remember: vary your edit to fit THIS image. Stay subtle on contrast and clarity. Be a professional colorist, not an Instagram filter.`;
 
   try {
-    const resp = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: [
+    const completion = await groq.chat.completions.create({
+      model: "meta-llama/llama-4-scout-17b-16e-instruct",
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
         {
           role: "user",
-          parts: [
-            { inlineData: { mimeType: mediaType, data: imageBase64 } },
-            { text: userText },
+          content: [
+            { type: "text", text: userText },
+            {
+              type: "image_url",
+              image_url: { url: `data:${mediaType};base64,${imageBase64}` },
+            },
           ],
         },
       ],
-      config: {
-        systemInstruction: SYSTEM_PROMPT,
-        responseMimeType: "application/json",
-        temperature: 0.6,
-      },
+      response_format: { type: "json_object" },
+      temperature: 0.6,
+      max_tokens: 4096,
     });
 
-    const raw = (resp.text ?? "").trim();
+    const raw = (completion.choices[0]?.message?.content ?? "").trim();
     if (!raw) {
       return NextResponse.json({ error: "Empty response from model" }, { status: 502 });
     }
